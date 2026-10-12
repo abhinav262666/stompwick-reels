@@ -1,4 +1,4 @@
-name: Import approved Oct 13 reels
+name: Import approved Imagine reel
 on:
   workflow_dispatch:
 permissions:
@@ -12,12 +12,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --silent --show-error 'https://stompwick.com/media/draw-a-pumpkin-hook-FINAL.mp4' -o draw-a-pumpkin-hook-FINAL-0a4bfcc9.mp4
-          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour3-leaf-plates-hook-FINAL-v3.mp4' -o colour3-leaf-plates-hook-FINAL-v3-b9d597b1.mp4
-          printf '%s\n' '6ac86229e153c4b1698015c679cf0a9ec2d2c47558c447ead00a9077ef2ceb1e  draw-a-pumpkin-hook-FINAL-0a4bfcc9.mp4' '7c892e1a85743fd898529585c340b0927382e78ccd8827ec146ec729491c1121  colour3-leaf-plates-hook-FINAL-v3-b9d597b1.mp4' | sha256sum --check --status
-          git add -- draw-a-pumpkin-hook-FINAL-0a4bfcc9.mp4 colour3-leaf-plates-hook-FINAL-v3-b9d597b1.mp4
+          curl --fail --location --silent --show-error 'https://stompwick.com/media/imagine-quiet-garden-FINAL.mp4' -o imagine-quiet-garden-FINAL-17837c44.mp4
+          printf '%s\n' '17837c44407b3fa83199f04ced7f33389f62014fb1bb630296d912ba91c12fe0  imagine-quiet-garden-FINAL-17837c44.mp4' | sha256sum --check --status
+          git add -- imagine-quiet-garden-FINAL-17837c44.mp4
           if git diff --cached --quiet; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Import verified approved Oct 13 reels'
+          git commit -m 'Import verified approved Imagine reel'
           git push
