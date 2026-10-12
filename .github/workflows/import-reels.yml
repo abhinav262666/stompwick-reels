@@ -1,0 +1,23 @@
+name: Import approved Oct 13 reels
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and verify approved MP4s (no Instagram calls)
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error 'https://stompwick.com/media/draw-a-pumpkin-hook-FINAL.mp4' -o draw-a-pumpkin-hook-FINAL-0a4bfcc9.mp4
+          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour3-leaf-plates-hook-FINAL-v3.mp4' -o colour3-leaf-plates-hook-FINAL-v3-b9d597b1.mp4
+          printf '%s\n' '6ac86229e153c4b1698015c679cf0a9ec2d2c47558c447ead00a9077ef2ceb1e  draw-a-pumpkin-hook-FINAL-0a4bfcc9.mp4' '7c892e1a85743fd898529585c340b0927382e78ccd8827ec146ec729491c1121  colour3-leaf-plates-hook-FINAL-v3-b9d597b1.mp4' | sha256sum --check --status
+          git add -- draw-a-pumpkin-hook-FINAL-0a4bfcc9.mp4 colour3-leaf-plates-hook-FINAL-v3-b9d597b1.mp4
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Import verified approved Oct 13 reels'
+          git push
