@@ -12,11 +12,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --silent --show-error 'https://stompwick.com/media/imagine-quiet-garden-FINAL.mp4' -o imagine-quiet-garden-FINAL-17837c44.mp4
-          printf '%s\n' '17837c44407b3fa83199f04ced7f33389f62014fb1bb630296d912ba91c12fe0  imagine-quiet-garden-FINAL-17837c44.mp4' | sha256sum --check --status
-          git add -- imagine-quiet-garden-FINAL-17837c44.mp4
+          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour3-leaf-plates-hook-FINAL-v3b.mp4' -o colour3-leaf-plates-hook-FINAL-v3b-3916e948.mp4
+          printf '%s\n' '3916e94813d31eb0be5baef9abf502b24997a2408221287481575b59475536e0  colour3-leaf-plates-hook-FINAL-v3b-3916e948.mp4' | sha256sum --check --status
+          git add -- colour3-leaf-plates-hook-FINAL-v3b-3916e948.mp4
           if git diff --cached --quiet; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Import verified approved Imagine reel'
+          git commit -m 'Import verified Colour #3 v3b reel'
           git push
