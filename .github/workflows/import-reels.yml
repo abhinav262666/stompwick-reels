@@ -1,4 +1,4 @@
-name: Import approved Imagine reel
+name: Download-only import for Stompwick colour reels
 on:
   workflow_dispatch:
 permissions:
@@ -8,15 +8,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download and verify approved MP4s (no Instagram calls)
+      - name: Download and verify hosted MP4s (no Instagram calls)
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour3-leaf-plates-hook-FINAL-v3b.mp4' -o colour3-leaf-plates-hook-FINAL-v3b-3916e948.mp4
-          printf '%s\n' '3916e94813d31eb0be5baef9abf502b24997a2408221287481575b59475536e0  colour3-leaf-plates-hook-FINAL-v3b-3916e948.mp4' | sha256sum --check --status
-          git add -- colour3-leaf-plates-hook-FINAL-v3b-3916e948.mp4
+          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour-reel-pumpkins-wipe-15s.mp4' -o colour-reel-pumpkins-wipe-15s.mp4
+          printf '%s\n' 'bf7aa0b6dbf4e4868165f7e945afcd156af8b01193c7c2cad2f0a8762e002d00  colour-reel-pumpkins-wipe-15s.mp4' | sha256sum --check --status
+          git add -- colour-reel-pumpkins-wipe-15s.mp4
+          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour-reel-stompwick-regions-15s.mp4' -o colour-reel-stompwick-regions-15s.mp4
+          printf '%s\n' '2f50372141e2406266a29af9c4052c6defce00960c65cafb4f9b1cf569aa1b6f  colour-reel-stompwick-regions-15s.mp4' | sha256sum --check --status
+          git add -- colour-reel-stompwick-regions-15s.mp4
           if git diff --cached --quiet; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Import verified Colour #3 v3b reel'
+          git commit -m 'Import verified Stompwick colour reels'
           git push
