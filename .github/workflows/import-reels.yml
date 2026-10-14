@@ -13,13 +13,13 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --location --silent --show-error 'https://stompwick.com/media/colour-reel-pumpkins-wipe-voiced.mp4' -o colour-reel-pumpkins-wipe-voiced.mp4
-          printf '%s\\n' 'cf59f3dc2e27f44f69816743e07ac0cd5580404b6b24f2874967f5c3c61e04fb  colour-reel-pumpkins-wipe-voiced.mp4' | sha256sum --check --status
+          printf '%s\n' 'cf59f3dc2e27f44f69816743e07ac0cd5580404b6b24f2874967f5c3c61e04fb  colour-reel-pumpkins-wipe-voiced.mp4' | sha256sum --check --status
           git add -- colour-reel-pumpkins-wipe-voiced.mp4
           curl --fail --location --silent --show-error 'https://stompwick.com/media/colour-reel-regions-fill-voiced.mp4' -o colour-reel-regions-fill-voiced.mp4
-          printf '%s\\n' '43ad18ad15d95719305320af98b12bded2dcc9f28bad35af3afa265a058bf3d1  colour-reel-regions-fill-voiced.mp4' | sha256sum --check --status
+          printf '%s\n' '43ad18ad15d95719305320af98b12bded2dcc9f28bad35af3afa265a058bf3d1  colour-reel-regions-fill-voiced.mp4' | sha256sum --check --status
           git add -- colour-reel-regions-fill-voiced.mp4
           curl --fail --location --silent --show-error 'https://stompwick.com/media/colour-reel-V3-pumpkins-wipe-10s-voiced.mp4' -o colour-reel-V3-pumpkins-wipe-10s-voiced.mp4
-          printf '%s\\n' 'aa5ba2b683bfbcc67eab956330f6a815ba3b6680e2eb58fad1455205a69da938  colour-reel-V3-pumpkins-wipe-10s-voiced.mp4' | sha256sum --check --status
+          printf '%s\n' 'aa5ba2b683bfbcc67eab956330f6a815ba3b6680e2eb58fad1455205a69da938  colour-reel-V3-pumpkins-wipe-10s-voiced.mp4' | sha256sum --check --status
           git add -- colour-reel-V3-pumpkins-wipe-10s-voiced.mp4
           if git diff --cached --quiet; then exit 0; fi
           git config user.name 'github-actions[bot]'
