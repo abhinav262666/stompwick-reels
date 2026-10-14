@@ -1,0 +1,59 @@
+name: Import verified voiced V3 reel
+
+on:
+
+  workflow_dispatch:
+  
+permissions:
+
+  contents: write
+  
+jobs:
+
+  import:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+      - uses: actions/checkout@v4
+      
+      - name: Download and verify V3 reel
+      
+        shell: bash
+        
+        run: |
+        
+          set -euo pipefail
+          
+          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour-reel-V3-pumpkins-wipe-10s-voiced.mp4' -o colour-reel-V3-pumpkins-wipe-10s-voiced.mp4
+          
+          echo 'aa5ba2b683bfbcc67eab956330f6a815ba3b6680e2eb58fad1455205a69da938  colour-reel-V3-pumpkins-wipe-10s-voiced.mp4' > v3.sha256
+          
+          sha256sum --check v3.sha256
+          
+          git add -- colour-reel-V3-pumpkins-wipe-10s-voiced.mp4
+          
+          git config user.name 'github-actions[bot]'
+          
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          
+          git commit -m 'Import verified V3 voiced colour reel'
+          
+          git push
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
