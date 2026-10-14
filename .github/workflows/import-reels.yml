@@ -1,4 +1,4 @@
-name: Download-only import for Stompwick voiced colour reels
+name: Import approved Stompwick reels
 on:
   workflow_dispatch:
 permissions:
@@ -8,21 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download and verify hosted voiced MP4s (no Instagram calls)
+      - name: Download and verify three approved reels only (no Instagram calls)
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour-reel-pumpkins-wipe-voiced.mp4' -o colour-reel-pumpkins-wipe-voiced.mp4
-          printf '%s\n' 'cf59f3dc2e27f44f69816743e07ac0cd5580404b6b24f2874967f5c3c61e04fb  colour-reel-pumpkins-wipe-voiced.mp4' | sha256sum --check --status
-          git add -- colour-reel-pumpkins-wipe-voiced.mp4
-          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour-reel-regions-fill-voiced.mp4' -o colour-reel-regions-fill-voiced.mp4
-          printf '%s\n' '43ad18ad15d95719305320af98b12bded2dcc9f28bad35af3afa265a058bf3d1  colour-reel-regions-fill-voiced.mp4' | sha256sum --check --status
-          git add -- colour-reel-regions-fill-voiced.mp4
-          curl --fail --location --silent --show-error 'https://stompwick.com/media/colour-reel-V3-pumpkins-wipe-10s-voiced.mp4' -o colour-reel-V3-pumpkins-wipe-10s-voiced.mp4
-          printf '%s\n' 'aa5ba2b683bfbcc67eab956330f6a815ba3b6680e2eb58fad1455205a69da938  colour-reel-V3-pumpkins-wipe-10s-voiced.mp4' | sha256sum --check --status
-          git add -- colour-reel-V3-pumpkins-wipe-10s-voiced.mp4
-          if git diff --cached --quiet; then exit 0; fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Import verified voiced colour reels'
-          git push
+          fetch_verify() {
+            url="$1" expected="$2" filename="$3"
+            curl --fail --location --silent --show-error "$url" -o "$filename"
+            printf "%s  %s\n" "$expected" "$filename" | sha256sum --check --strict
+            git add -- "$filename"
+          }
+          fetch_verify "https://stompwick.com/media/colour-reel-v4-7410c5e3c74a.mp4" "08d298ac8709bd5ab570fcbe890fa88d254d85b07bd9807b72812164ee7bc4d4" "colour-reel-V4-hook-text-voiced.mp4"
+          fetch_verify "https://stompwick.com/media/draw-a-leaf-7b4e84eee3c2.mp4" "a82bf819676ce2063754d17f8eb03e15e19c72ad57cc76592860c240bab617c0" "draw-a-leaf-with-stompwick-voiced.mp4"
+          fetch_verify "https://stompwick.com/media/imagine-rainy-day-c4a5e49dbb2b.mp4" "4cb3f9e0fc6f98c22fce4ae573ce301e9058e2a9a668a2be9c4e768c141b48b7" "imagine-rainy-day-composite-voiced.mp4"
+          git diff --cached --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --cached --quiet; then git commit -m "Import approved Stompwick Instagram reels"; git push; fi
