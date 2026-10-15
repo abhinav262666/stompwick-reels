@@ -1,0 +1,24 @@
+name: Import QC-approved revoice and maze
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch both owner-supplied temporary reels and verify exact SHA-256 before commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error 'https://stompwick.com/tmp-reels/colour-reel-V2b-revoice-a8044c34.mp4' -o 'colour-reel-V2b-regions-fill-voiced-revoice-sha-a8044c34.mp4'
+          printf '%s  %s\n' 'a8044c34a8c9722cae6f5c4d04023a79b63f9549d43516643379b09e7f831af3' 'colour-reel-V2b-regions-fill-voiced-revoice-sha-a8044c34.mp4' | sha256sum --check --strict
+          curl --fail --location --silent --show-error 'https://stompwick.com/tmp-reels/maze-easy1-flower-v2-e20bd791.mp4' -o 'book2-maze-reel-easy1-flower-voiced-v2-sha-e20bd791.mp4'
+          printf '%s  %s\n' 'e20bd7917efffc4f90d4a0a2acb5a601db59471871c12d4ba56a69465971dd7f' 'book2-maze-reel-easy1-flower-voiced-v2-sha-e20bd791.mp4' | sha256sum --check --strict
+          git diff --check
+          git add -- 'colour-reel-V2b-regions-fill-voiced-revoice-sha-a8044c34.mp4' 'book2-maze-reel-easy1-flower-voiced-v2-sha-e20bd791.mp4'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Import QC-approved revoice and maze reels'
+          git push
