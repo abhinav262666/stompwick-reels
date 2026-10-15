@@ -1,4 +1,4 @@
-name: Import QC-approved revoice and maze
+name: Import QC-approved dot reveal, spot reveal, and maze reels
 on:
   workflow_dispatch:
 permissions:
@@ -8,17 +8,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch both owner-supplied temporary reels and verify exact SHA-256 before commit
+      - name: Fetch exact temporary reels, verify raw SHA-256, and commit new assets
         shell: bash
         run: |
           set -euo pipefail
-          curl --fail --location --silent --show-error 'https://stompwick.com/tmp-reels/colour-reel-V2b-revoice-a8044c34.mp4' -o 'colour-reel-V2b-regions-fill-voiced-revoice-sha-a8044c34.mp4'
-          printf '%s  %s\n' 'a8044c34a8c9722cae6f5c4d04023a79b63f9549d43516643379b09e7f831af3' 'colour-reel-V2b-regions-fill-voiced-revoice-sha-a8044c34.mp4' | sha256sum --check --strict
-          curl --fail --location --silent --show-error 'https://stompwick.com/tmp-reels/maze-easy1-flower-v2-e20bd791.mp4' -o 'book2-maze-reel-easy1-flower-voiced-v2-sha-e20bd791.mp4'
-          printf '%s  %s\n' 'e20bd7917efffc4f90d4a0a2acb5a601db59471871c12d4ba56a69465971dd7f' 'book2-maze-reel-easy1-flower-voiced-v2-sha-e20bd791.mp4' | sha256sum --check --strict
+          fish='book2-dot-reveal-reel-fish-voiced-v2-sha-20aa8d2c.mp4'
+          spot='book2-spot-reveal-reel-voiced-v2-sha-34126f07.mp4'
+          maze='book2-maze-reel-medium1-sun-voiced-sha-37e8127b.mp4'
+          test ! -e "$fish" && test ! -e "$spot" && test ! -e "$maze"
+          curl --fail --location --silent --show-error 'https://stompwick.com/tmp-reels/book2-dot-reveal-fish-77a0cec03723.mp4' -o "$fish"
+          printf '%s  %s\n' '20aa8d2ced521a993a30a4dcb4c54bedb0af23f9bcc270feecd2eba5fe0ded36' "$fish" | sha256sum --check --strict
+          curl --fail --location --silent --show-error 'https://stompwick.com/tmp-reels/book2-spot-reveal-6a41688a7998.mp4' -o "$spot"
+          printf '%s  %s\n' '34126f07a784ffb2d00ff517cf3d3ed098bb46782a57052739dd53befa3197bf' "$spot" | sha256sum --check --strict
+          curl --fail --location --silent --show-error 'https://stompwick.com/tmp-reels/book2-maze-medium1-598025c74360.mp4' -o "$maze"
+          printf '%s  %s\n' '37e8127bab4a6a5dfc67499fbb0824a2d93c04fbcf0d86b2d88b9f9c6ae4a168' "$maze" | sha256sum --check --strict
           git diff --check
-          git add -- 'colour-reel-V2b-regions-fill-voiced-revoice-sha-a8044c34.mp4' 'book2-maze-reel-easy1-flower-voiced-v2-sha-e20bd791.mp4'
+          git add -- "$fish" "$spot" "$maze"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git commit -m 'Import QC-approved revoice and maze reels'
+          git commit -m 'Import QC-approved dot reveal, spot reveal, and maze reels'
           git push
